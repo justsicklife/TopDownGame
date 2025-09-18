@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         rb.velocity = moveInput * moveSpeed;
-        Debug.Log(rb.velocity);     
     }
 
     public void Move(InputAction.CallbackContext context)
