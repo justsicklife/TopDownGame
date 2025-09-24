@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ID: 2
+  Name: Potion
 --- !u!212 &2717773408170269695
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerItemController : MonoBehaviour
+public class PlayerItemCollector : MonoBehaviour
 {
 
     private InventoryController inventoryController;
@@ -24,6 +24,7 @@ public class PlayerItemController : MonoBehaviour
 
                 if (itemAdded)
                 {
+                    item.PickUp();
                     Destroy(collision.gameObject);
                 }
             }
