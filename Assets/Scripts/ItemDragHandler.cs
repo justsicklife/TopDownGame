@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ItemDragHandler : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler
+public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
 
     Transform originalParent;
     CanvasGroup canvasGroup;
+
+    public float minDropDistance = 2f;
+    public float maxDropDistance = 3f;
 
     void Start()
     {
@@ -64,10 +67,44 @@ public class ItemDragHandler : MonoBehaviour,IBeginDragHandler,IDragHandler,IEnd
         }
         else
         {
-            transform.SetParent(originalParent);
+            if (!IsWithinInventory(eventData.position))
+            {
+                DropItem(originalSlot);
+            }
+            else
+            {
+                transform.SetParent(originalParent);
+            }
         }
 
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    }
+
+    bool IsWithinInventory(Vector2 mousePosition)
+    {
+        RectTransform inventoryRect = originalParent.parent.GetComponent<RectTransform>();
+        return RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition);
+    }
+
+    void DropItem(Slot originalSlot)
+    {
+        originalSlot.currentItem = null;
+
+        Transform playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (playerTransform == null)
+        {
+            Debug.LogError("Missing 'Player' tag");
+        }
+
+        Vector2 dropOffset = Random.insideUnitCircle.normalized * Random.Range(minDropDistance, maxDropDistance);
+        Vector2 dropPosition = (Vector2)playerTransform.position + dropOffset;
+
+        GameObject dropItem = Instantiate(gameObject, dropPosition, Quaternion.identity);
+
+        dropItem.GetComponent<BounceEffect>().StartBounce();
+
+        Destroy(gameObject);
+
     }
 
 }
