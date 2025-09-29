@@ -48,6 +48,9 @@ TagManager:
   - name: WalkInfront
     uniqueID: 931919043
     locked: 0
+  - name: Grass
+    uniqueID: 360815117
+    locked: 0
   - name: Collision
     uniqueID: 1882928099
     locked: 0
