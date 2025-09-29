@@ -28,6 +28,7 @@ public class MapTransation : MonoBehaviour
             confiner.m_BoundingShape2D = mapBoundry;
             confiner.InvalidatePathCache();
             UpdatePlayerPosition(collision.gameObject);
+            MapController_Manual.Instance?.HighlightArea(mapBoundry.name);
         }
     }
 
