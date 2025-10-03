@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Cinemachine;
 using UnityEngine;
 
@@ -13,14 +14,22 @@ public class SaveController : MonoBehaviour
 
     private HotbarController hotbarController;
 
+    private Chest[] chests;
+
     // Start is called before the first frame update
     void Start()
+    {
+        InitializeComponents();
+
+        LoadGame();
+    }
+
+    private void InitializeComponents()
     {
         saveLocation = Path.Combine(Application.persistentDataPath, "saveData.json");
         inventoryController = FindObjectOfType<InventoryController>();
         hotbarController = FindObjectOfType<HotbarController>();
-
-        LoadGame();
+        chests = FindObjectsOfType<Chest>();
     }
 
     public void saveGame()
@@ -30,10 +39,28 @@ public class SaveController : MonoBehaviour
             playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position,
             mapBoundary = FindObjectOfType<CinemachineConfiner>().m_BoundingShape2D.gameObject.name,
             inventorySaveData = inventoryController.GetInventoryItems(),
-            hotbarSaveData = hotbarController.GetHotbarItems()
+            hotbarSaveData = hotbarController.GetHotbarItems(),
+            chestSaveData = GetChestsState()
         };
 
         File.WriteAllText(saveLocation, JsonUtility.ToJson(saveDeta));
+    }
+
+    private List<ChestSaveData> GetChestsState()
+    {
+        List<ChestSaveData> chestStates = new List<ChestSaveData>();
+
+        foreach (Chest chest in chests)
+        {
+            ChestSaveData chestSaveData = new ChestSaveData
+            {
+                chestID = chest.ChestID,
+                isOpened = chest.isOpend
+            };
+            chestStates.Add(chestSaveData);
+        }
+
+        return chestStates;
     }
 
     public void LoadGame()
@@ -55,13 +82,32 @@ public class SaveController : MonoBehaviour
             inventoryController.SetInventoryItems(saveData.inventorySaveData);
 
             hotbarController.SetHotbarItems(saveData.hotbarSaveData);
+
+            LoadChestStates(saveData.chestSaveData);
         }
         else
         {
             saveGame();
 
+            inventoryController.SetInventoryItems(new List<InventorySaveData>());
+
+            hotbarController.SetHotbarItems(new List<InventorySaveData>());
+
             MapController_Dynamic.Instance?.GenerateMap();
 
+        }
+    }
+
+    private void LoadChestStates(List<ChestSaveData> chestStates) {
+
+        foreach (Chest chest in chests)
+        {
+            ChestSaveData chestSaveData = chestStates.FirstOrDefault(c => c.chestID == chest.ChestID);
+
+            if (chestSaveData != null)
+            {
+                chest.SetOpened(chestSaveData.isOpened);
+            }
         }
     }
 
