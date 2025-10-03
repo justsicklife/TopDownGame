@@ -101,6 +101,8 @@ public class ItemDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         GameObject dropItem = Instantiate(gameObject, dropPosition, Quaternion.identity);
 
+        dropItem.GetComponent<Item>().isPickedUp = false;
+
         dropItem.GetComponent<BounceEffect>().StartBounce();
 
         Destroy(gameObject);

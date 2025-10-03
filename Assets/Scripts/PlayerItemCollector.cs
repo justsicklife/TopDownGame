@@ -18,13 +18,14 @@ public class PlayerItemCollector : MonoBehaviour
         if (collision.CompareTag("Item"))
         {
             Item item = collision.GetComponent<Item>();
-            if (item != null)
+            if (item != null && !item.isPickedUp)
             {
                 bool itemAdded = inventoryController.AddItem(collision.gameObject);
 
                 if (itemAdded)
                 {
                     item.PickUp();
+                    item.isPickedUp = true;
                     Destroy(collision.gameObject);
                 }
             }
