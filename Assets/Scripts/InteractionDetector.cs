@@ -8,6 +8,8 @@ public class InteractionDetector : MonoBehaviour
 
     private IInteractable interactableInRange = null;
 
+    public bool isInInteractRange { get; private set; } = false;
+ 
     public GameObject interactionIcon;
 
     // Start is called before the first frame update
@@ -20,10 +22,13 @@ public class InteractionDetector : MonoBehaviour
     {
         if (context.performed)
         {
-            interactableInRange?.Interact();
-            if (!interactableInRange.CanInteract())
+            if (isInInteractRange)
             {
-                interactionIcon.SetActive(false);
+                interactableInRange?.Interact();
+                if (!interactableInRange.CanInteract())
+                {
+                    interactionIcon.SetActive(false);
+                }
             }
         }
     }
@@ -34,6 +39,7 @@ public class InteractionDetector : MonoBehaviour
         {
             interactableInRange = interactable;
             interactionIcon.SetActive(true);
+            isInInteractRange = true;
         }
     }
 
@@ -43,6 +49,7 @@ public class InteractionDetector : MonoBehaviour
         {
             interactableInRange = null;
             interactionIcon.SetActive(false);
+            isInInteractRange = false;
         }
     }
 

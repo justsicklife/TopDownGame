@@ -9,11 +9,32 @@ public class DialogueTrigger : MonoBehaviour
     [SerializeField]
     private TextAsset inkJSON;
 
-    void Update()
-    {
-        if(InputManager.GetInstance().GetInteractPressed())
+    [SerializeField]
+    private bool autoStart = false;
+
+    public InteractionDetector interactionDetector;
+
+    void Start()
+    {   
+        if(autoStart)
         {
             DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
         }
     }
+
+    void Update()
+    {
+        if (autoStart) return;
+
+        if (InputManager.GetInstance().GetInteractPressed() && interactionDetector.isInInteractRange)
+        {
+            DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+        }
+    }
+
+    public void ChangeInkJSON(TextAsset newInkJSON)
+    {
+        inkJSON = newInkJSON;
+    }
+
 }

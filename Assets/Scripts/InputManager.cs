@@ -67,7 +67,6 @@ public class InputManager : MonoBehaviour
     {
         if (context.performed)
         {
-            Debug.Log("Enter");
             submitPressed = true;
         }
         else if (context.canceled)

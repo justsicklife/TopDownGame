@@ -12,6 +12,9 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
 
+    [SerializeField]
+    private TextMeshProUGUI displayNameText;
+
     [Header("Choices UI")]
     [SerializeField]
     private GameObject[] choices;
@@ -22,6 +25,10 @@ public class DialogueManager : MonoBehaviour
     private bool dialogueIsPlaying;
 
     private static DialogueManager instance;
+
+    private const string SPEAKER_TAG =  "speaker";
+
+    private const string PORTRAIT_TAG = "portrait";
 
     void Awake()
     {
@@ -90,6 +97,8 @@ public class DialogueManager : MonoBehaviour
             dialogueText.text = nextDialgoue;
 
             DisplayChoices();
+
+            HandleTags(currentStory.currentTags);
         }
         else
         {
@@ -97,6 +106,34 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void HandleTags(List<string> currentTags)
+    {
+        foreach(string tag in currentTags)
+        {
+            string[] splitTag = tag.Split(":");
+            if (splitTag.Length != 2)
+            {
+                Debug.LogError("Tag could not be appropriately parsed : " + tag);
+            }
+            string tagKey = splitTag[0].Trim();
+            string tagValue = splitTag[1].Trim();
+
+            switch(tagKey)
+            {
+                case SPEAKER_TAG:
+                    Debug.Log(tagValue);
+                    displayNameText.text = tagValue;
+                    break;
+                case PORTRAIT_TAG:
+                    Debug.Log("portrait=" + tagValue);
+                    break;
+                default:
+                    Debug.LogWarning("Tag came in but is not currently begin handled : " + tag);
+                    break;
+            }
+        }
+    }
+    
     private void DisplayChoices()
     {
         List<Choice> currentChoices = currentStory.currentChoices;
@@ -133,7 +170,6 @@ public class DialogueManager : MonoBehaviour
 
     public void MakeChoice(int choiceIndex)
     {
-        Debug.Log(choiceIndex);
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
     }
