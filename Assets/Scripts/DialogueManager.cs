@@ -4,6 +4,7 @@ using Ink.Runtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI displayNameText;
+
+    [SerializeField]
+    private Button ContinueButton;
 
     [Header("Choices UI")]
     [SerializeField]
@@ -89,14 +93,16 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
     }
 
-    private void ContinueStory()
+    public void ContinueStory()
     {
         if (currentStory.canContinue)
         {
             string nextDialgoue = currentStory.Continue();
             dialogueText.text = nextDialgoue;
 
-            DisplayChoices();
+            bool hasChoices = !DisplayChoices();
+
+            ContinueButton.gameObject.SetActive(hasChoices);
 
             HandleTags(currentStory.currentTags);
         }
@@ -134,9 +140,10 @@ public class DialogueManager : MonoBehaviour
         }
     }
     
-    private void DisplayChoices()
+    private bool DisplayChoices()
     {
         List<Choice> currentChoices = currentStory.currentChoices;
+        bool hasChoices = true;
 
         if (currentChoices.Count > choices.Length)
         {
@@ -153,12 +160,19 @@ public class DialogueManager : MonoBehaviour
             index++;
         }
 
+        if(index == 0)
+        {
+            hasChoices = false;
+        }
+
         for (int i = index; i < choices.Length; i++)
         {
             choices[i].gameObject.SetActive(false);
         }
 
         StartCoroutine(SelectFirstChoice());
+
+        return hasChoices;
     }
 
     private IEnumerator SelectFirstChoice()
