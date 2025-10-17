@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 전체 대사를 관리하는 딕셔너리
 public class DialogueResolver : MonoBehaviour
 {
     [SerializeField]

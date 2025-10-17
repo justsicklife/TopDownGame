@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boy : MonoBehaviour, IInteractable
+public class MailBox : MonoBehaviour,IInteractable
 {
-
     private bool isTalkable;
 
     void Start()

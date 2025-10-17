@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class DialogueTrigger : MonoBehaviour
 {
+    public static DialogueTrigger Instance { get; private set; }
+
     [Header("Ink JSON")]
     [SerializeField]
     private TextAsset inkJSON;
@@ -14,9 +16,20 @@ public class DialogueTrigger : MonoBehaviour
 
     public InteractionDetector interactionDetector;
 
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+    }
+
     void Start()
-    {   
-        if(autoStart)
+    {
+        if (autoStart)
         {
             DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
         }
@@ -32,9 +45,9 @@ public class DialogueTrigger : MonoBehaviour
         }
     }
 
-    public void ChangeInkJSON(TextAsset newInkJSON)
+    public void SetInkJSON(TextAsset pInkJson)
     {
-        inkJSON = newInkJSON;
+        this.inkJSON = pInkJson; 
     }
 
 }
