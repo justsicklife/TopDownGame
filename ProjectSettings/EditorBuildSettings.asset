@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/JoyHouseOutside.unity
+    guid: 74563d7a4ccc3f848ad1a3f8e14069ea
+  - enabled: 1
+    path: Assets/Scenes/StroyGame.unity
+    guid: 1e6ec2b2cc741df4f8140446194e6bc3
+  - enabled: 1
+    path: Assets/Scenes/JoyHouseExterior.unity
+    guid: be168eb91bffd6a4ea171937759744e5
   m_configObjects: {}
