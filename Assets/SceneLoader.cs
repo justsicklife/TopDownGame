@@ -1,10 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+
+    public FadeEffect fadeEffect;
+
+
     public void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
@@ -12,9 +17,10 @@ public class SceneLoader : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Player")
+        if (collision.tag == "Player")
         {
-            LoadScene("JoyHouseOutside");
+            fadeEffect.OnFade(FadeState.FadeOut,() => LoadScene("JoyHouseOutside"));
         }
     }
+
 }
