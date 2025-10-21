@@ -9,6 +9,13 @@ public class SceneLoader : MonoBehaviour
 
     public FadeEffect fadeEffect;
 
+    [SerializeField]
+    private string sceneName;
+
+    void Start()
+    {
+        fadeEffect = FindObjectOfType<FadeEffect>(true);
+    }
 
     public void LoadScene(string sceneName)
     {
@@ -19,7 +26,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            fadeEffect.OnFade(FadeState.FadeOut,() => LoadScene("JoyHouseOutside"));
+            fadeEffect.OnFade(FadeState.FadeOut,() => LoadScene(sceneName));
         }
     }
 
