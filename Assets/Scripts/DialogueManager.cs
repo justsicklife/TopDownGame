@@ -26,8 +26,6 @@ public class DialogueManager : MonoBehaviour
 
     private Story currentStory;
 
-    private bool dialogueIsPlaying;
-
     private static DialogueManager instance;
 
     private const string SPEAKER_TAG =  "speaker";
@@ -51,7 +49,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
-        dialogueIsPlaying = false;
+        GameManager.Instance.SetDialogueState(false);
         dialoguePanel.SetActive(false);
 
         choicesText = new TextMeshProUGUI[choices.Length];
@@ -65,7 +63,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (!dialogueIsPlaying)
+        if (!GameManager.Instance.IsDialoguePlaying)
         {
             return;
         }
@@ -80,7 +78,7 @@ public class DialogueManager : MonoBehaviour
     public void EnterDialogueMode(TextAsset inkJSON)
     {
         currentStory = new Story(inkJSON.text);
-        dialogueIsPlaying = true;
+        GameManager.Instance.SetDialogueState(true);
         dialoguePanel.SetActive(true);
 
         ContinueStory();
@@ -88,7 +86,7 @@ public class DialogueManager : MonoBehaviour
 
     private void ExitDialogueMode()
     {
-        dialogueIsPlaying = false;
+        GameManager.Instance.SetDialogueState(false);
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
     }

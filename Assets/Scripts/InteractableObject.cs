@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 캐릭터 대사와 관련된 코드 
-public class InteractableObject : MonoBehaviour
+public class InteractableObject : MonoBehaviour,IInteractable
 {
 
     [SerializeField]
@@ -21,5 +21,15 @@ public class InteractableObject : MonoBehaviour
     {
         TextAsset inkFile = dialogueResolver.GetInkFile(dialogueKey);
         DialogueTrigger.Instance.SetInkJSON(inkFile);
+    }
+
+    public void Interact()
+    {
+        ChangeDialogue();
+    }
+
+    public bool CanInteract()
+    {
+        return true;
     }
 }

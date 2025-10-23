@@ -26,11 +26,17 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        rb.velocity = moveInput * moveSpeed;
+        rb.velocity = moveInput * moveSpeed;   
     }
 
     public void Move(InputAction.CallbackContext context)
     {
+
+        if (GameManager.Instance.IsDialoguePlaying)
+        {
+            return;
+        }
+
         moveInput = context.ReadValue<Vector2>();
         animator.SetFloat("InputX", moveInput.x); 
         animator.SetFloat("InputY", moveInput.y);
