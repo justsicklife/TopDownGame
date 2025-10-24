@@ -41,7 +41,10 @@ public class DialogueTrigger : MonoBehaviour
 
         if (InputManager.GetInstance().GetInteractPressed() && interactionDetector.isInInteractRange)
         {
-            DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+            if(!GameManager.Instance.IsDialoguePlaying)
+            {
+                DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
+            }
         }
     }
 

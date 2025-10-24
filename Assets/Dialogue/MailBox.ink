@@ -1,23 +1,35 @@
--> MailBox
+-> mail_box
 
-=== MailBox ===
+=== mail_box ===
 우편함 이다.
     * [살펴본다]
-    -> lookMailBox
+    -> check_mail
     
     * [관심없다]
-    -> notLookMailBox
+    -> not_check_mail
 
-=== lookMailBox ===
+=== check_mail ===
 우편함을 살펴보는중
 서류가 몇장 쌓여있다.
 뭐부터 볼까?
 * [빛 독촉장]
-조이 헤이든 고객님, 귀하의 미납금 3억이 연체되었습니다.
-    일주일 이내 입금이 확인되지 않으면,
-    법적 조치 및 신용불량자 등록 절차가 진행될 수 있습니다.
-    -> END
+    -> notice
+* [매니저의 편지]
+    -> letter_manager    
 
+=== letter_manager ===
+조이 씨에게
+회사 내부 회의 결과 이후로 더 이상 함께하기 어렵다는 결론이 났습니다.
+향후 일정 및 계약 관련 내용은 별도로 메일로 전달드리겠습니다.
+부디 서로의 앞날에 좋은 일만 있기를 바랍니다.
+-> END
 
-=== notLookMailBox ===
+=== notice ===
+연채 안내, 해지 통보, 계약 종료
+온통 그런 단어뿐이다. 
+어떤 편지는 반쯤 찢겨 있다.
+-> END
+
+=== not_check_mail === 
+나중에 보자 
 -> END

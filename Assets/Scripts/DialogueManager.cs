@@ -28,7 +28,10 @@ public class DialogueManager : MonoBehaviour
 
     private static DialogueManager instance;
 
-    private const string SPEAKER_TAG =  "speaker";
+    [SerializeField]
+    private bool hasChoices;
+
+    private const string SPEAKER_TAG = "speaker";
 
     private const string PORTRAIT_TAG = "portrait";
 
@@ -49,6 +52,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
+        hasChoices = false;
         GameManager.Instance.SetDialogueState(false);
         dialoguePanel.SetActive(false);
 
@@ -68,9 +72,8 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (InputManager.GetInstance().GetSubmitPressed())
+        if (InputManager.GetInstance().GetSubmitPressed() && !hasChoices)
         {
-            Debug.Log("대사 시작");
             ContinueStory();
         }
     }
@@ -96,11 +99,12 @@ public class DialogueManager : MonoBehaviour
         if (currentStory.canContinue)
         {
             string nextDialgoue = currentStory.Continue();
+            Debug.Log(nextDialgoue);
             dialogueText.text = nextDialgoue;
 
-            bool hasChoices = !DisplayChoices();
+            DisplayChoices();
 
-            ContinueButton.gameObject.SetActive(hasChoices);
+            ContinueButton.gameObject.SetActive(!hasChoices);
 
             HandleTags(currentStory.currentTags);
         }
@@ -112,7 +116,7 @@ public class DialogueManager : MonoBehaviour
 
     private void HandleTags(List<string> currentTags)
     {
-        foreach(string tag in currentTags)
+        foreach (string tag in currentTags)
         {
             string[] splitTag = tag.Split(":");
             if (splitTag.Length != 2)
@@ -122,7 +126,7 @@ public class DialogueManager : MonoBehaviour
             string tagKey = splitTag[0].Trim();
             string tagValue = splitTag[1].Trim();
 
-            switch(tagKey)
+            switch (tagKey)
             {
                 case SPEAKER_TAG:
                     Debug.Log(tagValue);
@@ -137,11 +141,11 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-    
-    private bool DisplayChoices()
+
+    private void DisplayChoices()
     {
         List<Choice> currentChoices = currentStory.currentChoices;
-        bool hasChoices = true;
+        hasChoices = true;
 
         if (currentChoices.Count > choices.Length)
         {
@@ -158,7 +162,7 @@ public class DialogueManager : MonoBehaviour
             index++;
         }
 
-        if(index == 0)
+        if (index == 0)
         {
             hasChoices = false;
         }
@@ -169,8 +173,6 @@ public class DialogueManager : MonoBehaviour
         }
 
         StartCoroutine(SelectFirstChoice());
-
-        return hasChoices;
     }
 
     private IEnumerator SelectFirstChoice()
@@ -180,8 +182,19 @@ public class DialogueManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
     }
 
+    // 버튼 콜백 함수 
     public void MakeChoice(int choiceIndex)
     {
+        StartCoroutine(HandleChoice(choiceIndex));
+    }
+
+    // 코루틴으로 호출 하는 이유 
+    // 엔터키를 누르면 업데이트에 있는 continueStory 와 버튼이 같이 실행되서 
+    // 대사를 하나 넘기게 된다.
+    // 그래서 Button -> update 이렇게 실행시키기 위해 코루틴을 사용
+    private IEnumerator HandleChoice(int choiceIndex)
+    {
+        yield return new WaitForSeconds(0.01f);
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
     }

@@ -34,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (GameManager.Instance.IsDialoguePlaying)
         {
+            animator.SetBool("isWalking", false);
             return;
         }
 
