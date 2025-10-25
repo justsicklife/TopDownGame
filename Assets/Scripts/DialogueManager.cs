@@ -28,8 +28,9 @@ public class DialogueManager : MonoBehaviour
 
     private static DialogueManager instance;
 
-    [SerializeField]
     private bool hasChoices;
+
+    private DialogueTextEffect dialogueTextEffect;
 
     private const string SPEAKER_TAG = "speaker";
 
@@ -52,6 +53,8 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
+        dialogueTextEffect = GetComponent<DialogueTextEffect>();
+
         hasChoices = false;
         GameManager.Instance.SetDialogueState(false);
         dialoguePanel.SetActive(false);
@@ -74,7 +77,13 @@ public class DialogueManager : MonoBehaviour
 
         if (InputManager.GetInstance().GetSubmitPressed() && !hasChoices)
         {
-            ContinueStory();
+            if(dialogueTextEffect.isTyping)
+            {
+                dialogueTextEffect.CompleteTyping(dialogueText);
+            }else
+            {
+                ContinueStory();
+            }
         }
     }
 
@@ -99,8 +108,8 @@ public class DialogueManager : MonoBehaviour
         if (currentStory.canContinue)
         {
             string nextDialgoue = currentStory.Continue();
-            Debug.Log(nextDialgoue);
             dialogueText.text = nextDialgoue;
+            dialogueTextEffect.ApplyEffect(dialogueText, DialogueEffectType.Typewriter);
 
             DisplayChoices();
 
