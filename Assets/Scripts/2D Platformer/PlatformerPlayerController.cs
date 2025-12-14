@@ -51,19 +51,30 @@ public class PlatformerPlayerController : MonoBehaviour
     float wallJumpTimer;
     public Vector2 wallJumpPower = new Vector2(5f,10f);
 
+    private PlatformePlayerClimb playerClimb;
+
     void Start()
     {
-        
+        playerClimb = GetComponent<PlatformePlayerClimb>();
     }
 
     private bool WallCheck()
-    {
-        return Physics2D.OverlapBox(wallCheckPos.position,wallCheckSize,0,wallLayer);
-    
+    {   
+        Collider2D hit = Physics2D.OverlapBox(
+            wallCheckPos.position,
+            wallCheckSize,
+            0,
+            wallLayer
+            );
+        return hit != null; 
     }
 
     void Update()
-    {       
+    {
+        
+        if(playerClimb.climbState != ClimbState.None)
+            return;
+        
         ProcessGravity();
 
         ProcessWallSlide();
@@ -72,6 +83,7 @@ public class PlatformerPlayerController : MonoBehaviour
 
         ProcessWallJump();
     
+        // 벽 점프 중이 아니거나 
         if(!isWallJumping)
         {
             rb.velocity = new Vector2(horizontalMovement * moveSpeed,rb.velocity.y);
@@ -86,6 +98,16 @@ public class PlatformerPlayerController : MonoBehaviour
     
     public void Jump(InputAction.CallbackContext context)
     {
+        if(playerClimb.climbState == ClimbState.Hanging || playerClimb.climbState == ClimbState.Moving)
+        {
+            if(context.performed)
+            {
+                Debug.Log("밧줄에서 점프함");
+                rb.velocity = new Vector2(rb.velocity.x,jumpPower);
+                playerClimb.climbState = ClimbState.None;
+            }
+        }
+
         if(jumpsRemaining > 0)
         {
             if(context.performed)
@@ -101,11 +123,12 @@ public class PlatformerPlayerController : MonoBehaviour
         }
 
         // Wall Jump
-        if(context.performed && wallJumpTimer > 0f)
+        // 벽 점프가 가능 하고 
+        // 벽 점프 할때 
+        if(context.performed && isWallSliding)
         {
             isWallJumping = true;
             rb.velocity = new Vector2(wallJumpDirection * wallJumpPower.x,wallJumpPower.y); // Jump away from wall
-            wallJumpTimer = 0;
             
             // 방향과 다르다면 
             if(transform.localScale.x != wallJumpDirection)
@@ -117,11 +140,11 @@ public class PlatformerPlayerController : MonoBehaviour
             }
 
             Invoke(nameof(CancelWallJump),wallJumpTime + 0.1f);
-        } 
+        }
     }
 
     // 중력 떨어지는 속도 증가함
-    private void ProcessGravity ()
+    public void ProcessGravity ()
     {
         if(rb.velocity.y < 0)
         {
@@ -141,7 +164,7 @@ public class PlatformerPlayerController : MonoBehaviour
     {
         // 땅에 붙어있지 않고 벽이랑 붙어있고 움직임 방향이 있다면
         if(!isGrounded && WallCheck() && horizontalMovement != 0)
-        {   
+        { 
             isWallSliding = true;
             // 뭔말인지 몰루
             rb.velocity = new Vector2(rb.velocity.x,Mathf.Max(rb.velocity.y,-wallSlideSpeed));
@@ -152,20 +175,20 @@ public class PlatformerPlayerController : MonoBehaviour
         }
     }
 
+    // 벽 점프 하기전에 벽 점프 가능한지 보는 함수
     private void ProcessWallJump()
     {
         if(isWallSliding && !isWallJumping)
         {
-            isWallJumping = false;
             wallJumpDirection = -transform.localScale.x;
-            wallJumpTimer = wallJumpTime;
+            // wallJumpTimer = wallJumpTime;
 
             CancelInvoke(nameof(CancelWallJump));
         } 
-        else if(wallJumpTimer > 0f)
-        {
-            wallJumpTimer -= Time.deltaTime;
-        }
+        // else if(wallJumpTimer > 0f)
+        // {
+        //     wallJumpTimer -= Time.deltaTime;
+        // }
     }
 
     private void CancelWallJump()
