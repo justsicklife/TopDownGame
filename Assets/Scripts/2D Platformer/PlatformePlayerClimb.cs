@@ -21,8 +21,6 @@ public class PlatformePlayerClimb : MonoBehaviour
 
     public bool isInteraction = false;
 
-    private bool movingTrigger = false;
-
     private PlatformerPlayerController playerController;
 
     // Start is called before the first frame update

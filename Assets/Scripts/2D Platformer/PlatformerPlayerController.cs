@@ -7,8 +7,9 @@ public class PlatformerPlayerController : MonoBehaviour
 {
 
     public Rigidbody2D rb;
-
     bool isFacingRight = true;
+
+    public ParticleSystem smokeFX;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -105,6 +106,7 @@ public class PlatformerPlayerController : MonoBehaviour
                 Debug.Log("밧줄에서 점프함");
                 rb.velocity = new Vector2(rb.velocity.x,jumpPower);
                 playerClimb.climbState = ClimbState.None;
+                JumpFX();
             }
         }
 
@@ -120,6 +122,7 @@ public class PlatformerPlayerController : MonoBehaviour
                 rb.velocity = new Vector2(rb.velocity.x,rb.velocity.y* 0.5f);
                 jumpsRemaining--;
             }
+            JumpFX();
         }
 
         // Wall Jump
@@ -129,7 +132,8 @@ public class PlatformerPlayerController : MonoBehaviour
         {
             isWallJumping = true;
             rb.velocity = new Vector2(wallJumpDirection * wallJumpPower.x,wallJumpPower.y); // Jump away from wall
-            
+            JumpFX();
+
             // 방향과 다르다면 
             if(transform.localScale.x != wallJumpDirection)
             {
@@ -141,6 +145,11 @@ public class PlatformerPlayerController : MonoBehaviour
 
             Invoke(nameof(CancelWallJump),wallJumpTime + 0.1f);
         }
+    }
+
+    private void JumpFX()
+    {
+        smokeFX.Play();
     }
 
     // 중력 떨어지는 속도 증가함
