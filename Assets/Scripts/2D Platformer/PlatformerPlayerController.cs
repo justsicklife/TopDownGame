@@ -19,8 +19,15 @@ public class PlatformerPlayerController : MonoBehaviour
     [Header("Jumping")]
     public float jumpPower = 10f;
     public int maxJumps = 2;
-    int jumpsRemaining;
+    public int jumpsRemaining;
+    [SerializeField] 
+    float jumpHoldForce = 2f;
+    [SerializeField]
+    float maxHoldTime = 0.25f;
 
+    float jumpHoldTimer;
+
+    public bool isJumping = false;
 
     [Header("GroundCheck")]
     public Transform groundCheckPos;
@@ -83,7 +90,13 @@ public class PlatformerPlayerController : MonoBehaviour
         GroundCheck();
 
         ProcessWallJump();
-    
+
+        if(isJumping)
+        {
+            rb.velocity = new Vector2(rb.velocity.x,rb.velocity.y + jumpHoldTimer);
+            jumpHoldTimer -= Time.deltaTime;
+        }
+
         // 벽 점프 중이 아니거나 
         if(!isWallJumping)
         {
@@ -115,12 +128,13 @@ public class PlatformerPlayerController : MonoBehaviour
             if(context.performed)
             {
                 rb.velocity = new Vector2(rb.velocity.x,jumpPower);
+                isJumping = true;
+                jumpHoldTimer = maxHoldTime;
                 jumpsRemaining--;
             }
             else if(context.canceled)
             {
-                rb.velocity = new Vector2(rb.velocity.x,rb.velocity.y* 0.5f);
-                jumpsRemaining--;
+                isJumping = false;
             }
             JumpFX();
         }
@@ -220,7 +234,19 @@ public class PlatformerPlayerController : MonoBehaviour
     // 캐릭터가 땅 밟고있는지 체크
     private void GroundCheck()
     {
-        if(Physics2D.OverlapBox(groundCheckPos.position,groundCheckSize,0,groundLayer))
+
+        RaycastHit2D hit = Physics2D.BoxCast(groundCheckPos.position,groundCheckSize,0f,Vector2.down,0.05f,groundLayer);
+
+        if(hit.collider != null && rb.velocity.y <= 0.2f)
+        {
+            Debug.Log(hit.collider.gameObject.name);
+        }
+
+        if(
+            // hit.collider != null && rb.velocity.y <= 0.2f
+        //  && rb.velocity.y <= 0.2f
+            Physics2D.OverlapBox(groundCheckPos.position,groundCheckSize,0,groundLayer)
+            )
         {
             jumpsRemaining = maxJumps;
             isGrounded = true;
@@ -233,8 +259,11 @@ public class PlatformerPlayerController : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireCube(groundCheckPos.position,groundCheckSize);
+         Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(
+            groundCheckPos.position + Vector3.down * 0.05f,
+            groundCheckSize
+        );
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(wallCheckPos.position,wallCheckSize);
     }

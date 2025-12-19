@@ -823,7 +823,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1066,7 +1066,7 @@ Transform:
   m_GameObject: {fileID: 663007438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.79577494, y: -0.82480466, z: -10}
+  m_LocalPosition: {x: -2.557, y: -3.019, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1208,11 +1208,11 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -15.956671, y: 9.994444}
-      - {x: -16.00452, y: 2.0777986}
-      - {x: -15.86705, y: -6.980936}
-      - {x: 14.023, y: -6.980937}
-      - {x: 13.972301, y: 9.905599}
+    - - {x: -17.559322, y: 9.994444}
+      - {x: -17.830797, y: 2.1150696}
+      - {x: -17.842413, y: -6.980935}
+      - {x: 16.63197, y: -7.130021}
+      - {x: 16.58127, y: 10.129225}
   m_UseDelaunayMesh: 0
 --- !u!4 &802185773
 Transform:
@@ -6186,6 +6186,7 @@ MonoBehaviour:
   moveSpeed: 5
   jumpPower: 10
   maxJumps: 2
+  jumpsRemaining: 0
   groundCheckPos: {fileID: 1703202438}
   groundCheckSize: {x: 0.5, y: 0.04}
   groundLayer:
@@ -6380,7 +6381,7 @@ Transform:
   m_GameObject: {fileID: 1026297291}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.79577494, y: -0.82480466, z: 0}
+  m_LocalPosition: {x: -2.557, y: -3.019, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7693,7 +7694,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1429243625}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9167,7 +9168,7 @@ Transform:
   m_GameObject: {fileID: 1703202437}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9338,7 +9339,7 @@ Transform:
   m_GameObject: {fileID: 2100275419}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.79577494, y: -0.81133354, z: -10}
+  m_LocalPosition: {x: -2.5476024, y: -0.8300431, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
